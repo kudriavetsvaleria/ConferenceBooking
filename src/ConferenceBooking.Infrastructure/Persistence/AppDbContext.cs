@@ -23,5 +23,14 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
+
+
+        modelBuilder.Entity<Room>()
+            .Property(r => r.PricePerHour)
+            .HasPrecision(10, 2);
+
+        modelBuilder.Entity<Service>()
+            .Property(s => s.Price)
+            .HasPrecision(10, 2);
     }
 }
