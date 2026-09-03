@@ -81,4 +81,11 @@ public class BookingRepository : IBookingRepository
                          && bs.Booking.StartTime < end && start < bs.Booking.EndTime)
             .SumAsync(bs => bs.Quantity);
     }
+
+    public async Task<List<BookingService>> GetBookingServicesAsync(int bookingId)
+    {
+        return await _context.BookingServices
+            .Where(bs => bs.BookingId == bookingId)
+            .ToListAsync();
+    }
 }

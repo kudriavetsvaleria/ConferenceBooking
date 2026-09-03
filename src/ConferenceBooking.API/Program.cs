@@ -30,6 +30,7 @@ builder.Services.AddScoped<ITokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IServiceCatalogService, ServiceCatalogService>();
+builder.Services.AddScoped<IBookingManagementService, BookingManagementService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
