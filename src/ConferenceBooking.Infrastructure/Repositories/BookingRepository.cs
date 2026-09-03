@@ -72,4 +72,13 @@ public class BookingRepository : IBookingRepository
         _context.Bookings.Update(booking);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<int> GetBookedServiceQuantityAsync(int serviceId, DateTime start, DateTime end)
+    {
+        return await _context.BookingServices
+            .Where(bs => bs.ServiceId == serviceId
+                         && bs.Booking.Status != BookingStatus.Cancelled
+                         && bs.Booking.StartTime < end && start < bs.Booking.EndTime)
+            .SumAsync(bs => bs.Quantity);
+    }
 }
