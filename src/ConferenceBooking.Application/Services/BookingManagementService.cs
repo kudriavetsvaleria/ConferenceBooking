@@ -79,7 +79,7 @@ public class BookingManagementService : IBookingManagementService
         return responses;
     }
 
-    public async Task CancelAsync(int bookingId, int userId)
+    public async Task<string> CancelAsync(int bookingId, int userId)
     {
         var booking = await _bookingRepository.GetByIdAsync(bookingId);
         if (booking is null)
@@ -91,11 +91,17 @@ public class BookingManagementService : IBookingManagementService
         if (booking.Status == BookingStatus.Cancelled)
             throw new InvalidOperationException("Бронь вже скасована.");
 
-        if (booking.StartTime - DateTime.UtcNow < TimeSpan.FromHours(24))
-            throw new InvalidOperationException("Скасувати бронь можна не пізніше ніж за 24 години до початку.");
+        if (booking.StartTime - DateTime.UtcNow < TimeSpan.FromHours(48))
+            throw new InvalidOperationException("Скасувати бронь можна не пізніше ніж за 48 годин до початку.");
+
+        var wasPaid = booking.Status == BookingStatus.Paid;
 
         booking.Status = BookingStatus.Cancelled;
         await _bookingRepository.UpdateAsync(booking);
+
+        return wasPaid
+            ? "Бронь скасовано. Гроші буде повернено."
+            : "Бронь скасовано.";
     }
 
     public async Task PayAsync(int bookingId, int userId)

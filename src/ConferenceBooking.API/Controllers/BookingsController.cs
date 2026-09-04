@@ -52,8 +52,8 @@ public class BookingsController : ControllerBase
     {
         try
         {
-            await _bookingManagementService.CancelAsync(id, GetUserId());
-            return NoContent();
+            var message = await _bookingManagementService.CancelAsync(id, GetUserId());
+            return Ok(new { message });
         }
         catch (KeyNotFoundException ex)
         {
