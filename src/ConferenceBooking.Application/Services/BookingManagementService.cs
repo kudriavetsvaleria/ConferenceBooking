@@ -127,7 +127,7 @@ public class BookingManagementService : IBookingManagementService
 
         var bookingServices = await _bookingRepository.GetBookingServicesAsync(booking.Id);
 
-        var hours = (decimal)(booking.EndTime - booking.StartTime).TotalHours;
+        var hours = (decimal)(booking.EndTime - booking.StartTime).Ticks / TimeSpan.TicksPerHour;
         var totalPrice = room.PricePerHour * hours;
 
         var serviceResponses = new List<BookingServiceResponseItem>();
@@ -142,6 +142,6 @@ public class BookingManagementService : IBookingManagementService
 
         return new BookingResponse(
             booking.Id, room.Id, room.Name, booking.StartTime, booking.EndTime,
-            booking.Status.ToString(), totalPrice, serviceResponses);
+            booking.Status.ToString(), Math.Round(totalPrice, 2), serviceResponses);
     }
 }
